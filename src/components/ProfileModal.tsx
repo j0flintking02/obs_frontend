@@ -9,12 +9,13 @@ import {updateUserProfile} from "../redux/profileSlice.ts";
 import moment from "moment";
 
 
-const UploadInput = (props) => {
+export const UploadInput = (props) => {
     const [profileImage, setProfileImage] = useState('')
+    const [isDisabled, setIsDisabled] = useState(false)
     const dispatch = useDispatch()
 
     return (
-        <div className="flex m-4">
+        <div className="flex flex-col mt-2 border border-gray-200 p-4">
             <input
                 type="file"
                 id="profileImage"
@@ -24,22 +25,24 @@ const UploadInput = (props) => {
             />
             <button
                 type="button"
-                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 my-4"
                 onClick={() => {
                     dispatch(
                         imageUpload(profileImage))
                         .unwrap()
                         .then((data) => {
                             props.setFieldValue(props.field.name, data.url);
+                            setIsDisabled(true)
                         })
                 }}
+                disabled={isDisabled}
             >
                 Upload
             </button>
             {props.errorMessage ? (
-                <small className="text-red-600">
+                <div className="text-red-600">
                     {props.errorMessage}
-                </small>
+                </div>
             ) : null}
         </div>
     );
@@ -58,7 +61,7 @@ export default function ProfileModal({isOpen, handleModal, userProfile}: any) {
             .string(),
         dob: yup
             .string()
-            .test('dob', 'Should be greater than 18', (value)=>{
+            .test('dob', 'Should be greater than 18', (value) => {
                 return moment().diff(moment(value), "years")
             }),
         nationality: yup
@@ -106,11 +109,20 @@ export default function ProfileModal({isOpen, handleModal, userProfile}: any) {
                                                     validationSchema={schema}
                                                     initialValues={userProfile}
                                                     onSubmit={(data) => {
-                                                        dispatch(updateUserProfile(data)).unwrap().then((data) => {
+                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                        // @ts-ignore
+                                                        dispatch(updateUserProfile({
+                                                            profileImage: data.profileImage,
+                                                            firstName: data.firstName,
+                                                            lastName: data.lastName,
+                                                            dob: data.dob,
+                                                            age: data.dob ? moment().diff(moment(data.dob), 'years').toString() : '',
+                                                            nationality: data.nationality,
+                                                            maritalStatus: data.maritalStatus,
+                                                            gender: data.gender,
+                                                        })).unwrap().then((data) => {
                                                             if (data.message) {
                                                                 alert(data.message)
-                                                            } else if (data.user.isEmailVerified) {
-                                                                alert('Please verify your email')
                                                             } else {
                                                                 alert(data.message)
                                                             }

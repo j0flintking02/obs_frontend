@@ -70,7 +70,8 @@ export default function MainNavigation() {
                                             <Menu.Button
                                                 className="flex max-w-xs items-center rounded-full bg-blue-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800">
                                                 <span className="sr-only">Open user menu</span>
-                                                <img className="h-8 w-8 rounded-full" src={authState?.user.profileImage} alt=""/>
+                                                <img className="h-8 w-8 rounded-full" src={authState?.user.profileImage}
+                                                     alt=""/>
                                             </Menu.Button>
                                         </div>
                                         <Transition
@@ -116,12 +117,12 @@ export default function MainNavigation() {
                                             </Menu.Items>
                                         </Transition>
                                     </Menu>
-                                <div
+                                    {authState?.user.verificationStatus === 'VERIFIED' ? <div
                                         className="rounded-full bg-blue-300 p-1 text-green-600 text-5xl hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800"
                                     >
                                         <span className="sr-only">View notifications</span>
                                         <CheckIcon className="h-4 w-4" aria-hidden="true"/>
-                                    </div>
+                                    </div> : ''}
                                 </div>
                             </div>
                             <div className="-mr-2 flex md:hidden">
@@ -162,8 +163,10 @@ export default function MainNavigation() {
                                     <img className="h-10 w-10 rounded-full" src={authState?.user.profileImage} alt=""/>
                                 </div>
                                 <div className="ml-3">
-                                    <div className="text-base font-medium leading-none text-white">{authState?.user.name}</div>
-                                    <div className="text-sm font-medium leading-none text-blue-400">{authState?.user.email}</div>
+                                    <div
+                                        className="text-base font-medium leading-none text-white">{authState?.user.name}</div>
+                                    <div
+                                        className="text-sm font-medium leading-none text-blue-400">{authState?.user.email}</div>
                                 </div>
                                 <button
                                     type="button"

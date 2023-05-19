@@ -6,29 +6,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {getUserProfile} from "../redux/profileSlice.ts";
 import {RootState} from "../redux/store.ts";
 import moment from "moment";
+import {ViewVerificationModal} from "../components/ViewDocumentModal.tsx";
 
-const userDetails = {
-    profile_picture: '',
-    userName: 'John Doe',
-    email: 'johndoe@example.com',
-    gender: 'Male',
-    age: '30',
-    date_of_birth: '12/02/1993',
-    marital_status: 'Married',
-    nationality: 'Rwandan',
-    documents: [
-        {
-            type: 'National ID',
-            link: ''
-        },
-        {
-            type: 'Passport',
-            link: ''
-        }
-    ]
-}
 export default function ProfilePage() {
     const [open, setOpen] = useState(false)
+    const [viewOpen, setViewOpen] = useState(false)
+    const [viewUrl, setViewUrl] = useState('')
     const authState = useSelector((state: RootState) => state.auth)
     const userProfile = useSelector((state: RootState) => state.profile.data)
     const dispatch = useDispatch()
@@ -106,23 +89,24 @@ export default function ProfilePage() {
                             <dt className="text-sm font-medium leading-6 text-gray-900">Official documents</dt>
                             <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                                 <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                                    {userDetails.documents.map((document) =>
                                         <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
                                             <div className="flex w-0 flex-1 items-center">
                                                 <PaperClipIcon className="h-5 w-5 flex-shrink-0 text-gray-400"
                                                                aria-hidden="true"/>
                                                 <div className="ml-4 flex min-w-0 flex-1 gap-2">
                                                 <span
-                                                    className="truncate font-medium">{document.type}</span>
+                                                    className="truncate font-medium">{userProfile?.documentId}</span>
                                                 </div>
                                             </div>
                                             <div className="ml-4 flex-shrink-0">
-                                                <a href="#"
+                                                <button onClick={()=>{
+                                                    setViewUrl(userProfile?.documentImage)
+                                                    setViewOpen(true)}}
                                                    className="font-medium text-indigo-600 hover:text-indigo-500">
                                                     View
-                                                </a>
+                                                </button>
                                             </div>
-                                        </li>)}
+                                        </li>
                                 </ul>
                             </dd>
                         </div>
@@ -130,6 +114,7 @@ export default function ProfilePage() {
                 </div>
             </div>
             <ProfileModal isOpen={open} handleModal={setOpen} userProfile={userProfile}/>
+            <ViewVerificationModal isOpen={viewOpen} handleModal={setViewOpen} url={viewUrl}/>
         </div>
     )
 }

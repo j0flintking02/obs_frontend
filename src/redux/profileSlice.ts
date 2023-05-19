@@ -26,18 +26,9 @@ export const updateUserProfile = createAsyncThunk(
     async (data: any) => {
         const user = JSON.parse(localStorage.getItem('user'));
 
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/v1/users/${data.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/v1/users/${user.user.id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
-                profileImage: data.profileImage,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                dob: data.dob,
-                age: data.dob?moment().diff(moment(data.dob), 'years').toString():'',
-                nationality: data.nationality,
-                maritalStatus: data.maritalStatus,
-                gender: data.gender,
-            }),
+            body: JSON.stringify(data),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
                 'AUTHORIZATION': `Bearer ${user.tokens.access.token}`
@@ -71,12 +62,16 @@ const profileSlice = createSlice({
             state.data = action.payload
         })
         builder.addCase(getUserProfile.fulfilled, (state: any, action) => {
-            state.status = 'success'
-            const newData = action.payload
-            const nameArray = action.payload.name.split(' ')
-            newData.firstName = nameArray[0]
-            newData.lastName = nameArray[1]
-            state.data = newData
+            if (action.payload.code) {
+                state.status = 'failed'
+            }else {
+                state.status = 'success'
+                const newData = action.payload
+                const nameArray = action.payload.name.split(' ')
+                newData.firstName = nameArray[0]
+                newData.lastName = nameArray[1]
+                state.data = newData
+            }
         })
         builder.addCase(getUserProfile.rejected, (state: any, action) => {
             state.status = 'failed'

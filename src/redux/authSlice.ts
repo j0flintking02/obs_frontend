@@ -135,9 +135,11 @@ export const refreshToken = createAsyncThunk(
         })
             .then((response) => response.json())
            .then((json)=> json)
+        console.log(response)
         if (response.code === 401) {
             console.log(response.code)
             localStorage.removeItem('user')
+            window.location.replace('/login')
         }
         return response
     }

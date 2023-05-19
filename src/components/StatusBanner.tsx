@@ -1,19 +1,21 @@
 import { XMarkIcon } from '@heroicons/react/20/solid'
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store.ts";
 
 export default function StatusBanner(props) {
     let bgColor = ''
     let message = ''
-    const status:any = 'verified'
+    const status:any = props.user.user?.verificationStatus
     switch (status){
-        case 'pending':
+        case 'UNVERIFIED':
             bgColor = 'bg-red-50'
             message = 'Please submit your documents for approval'
             break
-        case 'under_review':
+        case 'PENDING VERIFICATION':
             bgColor = 'bg-amber-50'
             message = 'Documents are still under review'
             break
-        case 'verified':
+        case 'VERIFIED':
             bgColor = 'bg-green-50'
             message = 'Documents have been approved'
             break
