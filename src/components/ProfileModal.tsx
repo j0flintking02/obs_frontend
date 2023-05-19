@@ -6,6 +6,7 @@ import * as yup from "yup";
 import {useDispatch} from "react-redux";
 import {imageUpload} from "../redux/imageSlice.ts";
 import {updateUserProfile} from "../redux/profileSlice.ts";
+import moment from "moment";
 
 
 const UploadInput = (props) => {
@@ -56,7 +57,10 @@ export default function ProfileModal({isOpen, handleModal, userProfile}: any) {
         lastName: yup
             .string(),
         dob: yup
-            .string(),
+            .string()
+            .test('dob', 'Should be greater than 18', (value)=>{
+                return moment().diff(moment(value), "years")
+            }),
         nationality: yup
             .string(),
         maritalStatus: yup
@@ -227,7 +231,7 @@ export default function ProfileModal({isOpen, handleModal, userProfile}: any) {
                                                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                                 onChange={handleChange}
                                                                                 onBlur={handleBlur}
-                                                                                value={values.dob}
+                                                                                value={moment(values.dob).format('YYYY-MM-DD')}
                                                                             />
                                                                             <small
                                                                                 className="text-red-600">{errors.dob && touched.dob && errors.dob}</small>

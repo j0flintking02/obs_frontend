@@ -33,7 +33,7 @@ export default function ProfilePage() {
     const userProfile = useSelector((state: RootState) => state.profile.data)
     const dispatch = useDispatch()
     useEffect(() => {
-        if (authState) {
+        if (authState?.user) {
             dispatch(getUserProfile({
                 token: authState.user.tokens.access.token, id: authState.user.user.id
             })).unwrap().then((data) => {

@@ -1,7 +1,5 @@
 import StatusBanner from "../components/StatusBanner.tsx";
-// import {useDispatch, useSelector} from "react-redux";
-// import {decrement, increment, incrementAsync} from "../redux/imageSlice.ts";
-// import {RootState} from "../redux/store.ts";
+import {PaperClipIcon, ArrowUpCircleIcon} from "@heroicons/react/20/solid";
 
 export default function HomePage() {
     // const count = useSelector((state: RootState) => state.counter.value)
@@ -17,27 +15,19 @@ export default function HomePage() {
                 <main>
                     <StatusBanner/>
                     <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-
-        {/*                <div>*/}
-        {/*                    <button*/}
-        {/*                        aria-label="Increment value"*/}
-        {/*                        onClick={() => dispatch(increment())}*/}
-        {/*                    >*/}
-        {/*                        Increment*/}
-        {/*                    </button>*/}
-        {/*                    <span>{count}</span>*/}
-        {/*                    <button*/}
-        {/*                        aria-label="Decrement value"*/}
-        {/*                        onClick={() => dispatch(decrement())}*/}
-        {/*                    >*/}
-        {/*                        Decrement*/}
-        {/*                    </button>*/}
-        {/*                    <button*/}
-        {/*  onClick={() => dispatch(incrementAsync( 90))}*/}
-        {/*>*/}
-        {/*  Add Async*/}
-        {/*</button>*/}
-        {/*                </div>*/}
+                        <div className="w-full h-96 border border-2 border-gray-500 border-dashed rounded flex justify-center items-center">
+                            <div className="">
+                                <p className="text-gray-600 pb-3">Documents for approval</p>
+                                <div className="flex justify-center">
+                                    <button
+                                    className="inline-flex justify-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-md mx-2">
+                                        <ArrowUpCircleIcon className="h-6 w-6 flex-shrink-0 text-white pr-2"
+                                                               aria-hidden="true"/>
+                                    Submit
+                                </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>

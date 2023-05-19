@@ -124,7 +124,7 @@ export const handleResetPassword = createAsyncThunk(
 
 export const refreshToken = createAsyncThunk(
     'auth/refreshToken',
-    async (data: { refreshToken: string, }) => {
+    async (data: { refreshToken: string }) => {
         console.log(data)
        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/v1/auth/refresh-tokens`, {
             method: 'POST',
@@ -135,6 +135,10 @@ export const refreshToken = createAsyncThunk(
         })
             .then((response) => response.json())
            .then((json)=> json)
+        if (response.code === 401) {
+            console.log(response.code)
+            localStorage.removeItem('user')
+        }
         return response
     }
 )

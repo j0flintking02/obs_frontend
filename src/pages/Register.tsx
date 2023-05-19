@@ -27,10 +27,20 @@ export function Register() {
             .required('Please Enter your Email'),
         password: yup
             .string()
-            .required('Please Enter your password'),
+            .required('Please Enter your password')
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+            ),
         confirmPassword: yup
             .string()
-            .required('Please Enter your password'),
+            .required('Please Enter your password')
+            .when('password', {
+                is: val => (val && val.length > 0 ? true : false),
+                then: ()=> yup.string().oneOf(
+                    [yup.ref('password')],"Password miss match"
+                )
+            }),
     });
 
     return (

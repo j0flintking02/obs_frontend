@@ -12,7 +12,7 @@ export const Button = ({label, disabled, type, onClick, style}:any) => {
     return (
         <button
             type={type}
-            className={`flex w-full justify-center rounded-md ${buttonStyles}  px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-blue-500`}
+            className={`flex w-full justify-center rounded-md ${buttonStyles}  px-5 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-blue-500`}
             disabled={disabled}
 			onClick={onClick}
         >

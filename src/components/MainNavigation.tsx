@@ -6,13 +6,8 @@ import {logout, refreshToken} from "../redux/authSlice.ts";
 import {useNavigate} from "react-router-dom";
 import {RootState} from "../redux/store.ts";
 import moment from "moment";
+import {CheckIcon} from "@heroicons/react/20/solid";
 
-const user = {
-    name: 'Jonathan',
-    email: 'tom@example.com',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
     {name: 'Dashboard', href: '/dashboard', current: true},
 ]
@@ -28,8 +23,9 @@ export default function MainNavigation() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const authState = useSelector((state: RootState) => state.auth.user)
+
     useEffect(() => {
-        if (authState) {
+        if (authState?.user) {
             const now = moment()
             const expiresIn = moment(authState.tokens.access.expires)
             if (expiresIn.diff(now) < 0) dispatch(refreshToken({refreshToken: authState?.tokens.refresh.token}))
@@ -67,21 +63,14 @@ export default function MainNavigation() {
                             </div>
                             <div className="hidden md:block">
                                 <div className="ml-4 flex items-center md:ml-6">
-                                    <button
-                                        type="button"
-                                        className="rounded-full bg-gray-800 p-1 text-blue-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800"
-                                    >
-                                        <span className="sr-only">View notifications</span>
-                                        <BellIcon className="h-6 w-6" aria-hidden="true"/>
-                                    </button>
 
                                     {/* Profile dropdown */}
-                                    <Menu as="div" className="relative ml-3">
+                                    <Menu as="div" className="relative mr-3">
                                         <div>
                                             <Menu.Button
                                                 className="flex max-w-xs items-center rounded-full bg-blue-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800">
                                                 <span className="sr-only">Open user menu</span>
-                                                <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt=""/>
+                                                <img className="h-8 w-8 rounded-full" src={authState?.user.profileImage} alt=""/>
                                             </Menu.Button>
                                         </div>
                                         <Transition
@@ -110,7 +99,7 @@ export default function MainNavigation() {
                                                                 </a>
                                                                 <a
                                                                     onClick={() => dispatch(
-                                                                        logout()).unwrap().then(() => {
+                                                                        logout(navigate)).unwrap().then(() => {
                                                                         navigate("/login");
                                                                     })}
                                                                     className={classNames(
@@ -127,6 +116,12 @@ export default function MainNavigation() {
                                             </Menu.Items>
                                         </Transition>
                                     </Menu>
+                                <div
+                                        className="rounded-full bg-blue-300 p-1 text-green-600 text-5xl hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-800"
+                                    >
+                                        <span className="sr-only">View notifications</span>
+                                        <CheckIcon className="h-4 w-4" aria-hidden="true"/>
+                                    </div>
                                 </div>
                             </div>
                             <div className="-mr-2 flex md:hidden">
@@ -164,11 +159,11 @@ export default function MainNavigation() {
                         <div className="border-t border-blue-700 pb-3 pt-4">
                             <div className="flex items-center px-5">
                                 <div className="flex-shrink-0">
-                                    <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt=""/>
+                                    <img className="h-10 w-10 rounded-full" src={authState?.user.profileImage} alt=""/>
                                 </div>
                                 <div className="ml-3">
-                                    <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                                    <div className="text-sm font-medium leading-none text-blue-400">{user.email}</div>
+                                    <div className="text-base font-medium leading-none text-white">{authState?.user.name}</div>
+                                    <div className="text-sm font-medium leading-none text-blue-400">{authState?.user.email}</div>
                                 </div>
                                 <button
                                     type="button"
